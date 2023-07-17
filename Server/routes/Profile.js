@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { auth } = require("../middlewares/auth")
+const { auth } = require("../middlewares/Auth")
 const {updateProfile, deleteAccount, getAllUserDetails, updateDisplayPicture, getEnrolledCourses} = require('../controllers/Profile')
 
 // ********************************************************************************************************

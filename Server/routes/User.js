@@ -6,7 +6,7 @@ const router = express.Router()
 const { signup, login, sendotp, changePassword } = require('../controllers/Auth')
 const { resetPasswordToken, resetPassword } = require("../controllers/ResetPassword")
 
-const { auth } = require("../middlewares/auth")
+const {auth} = require('../middlewares/Auth')
 
 // Routes for Login, Signup, and Authentication
 
