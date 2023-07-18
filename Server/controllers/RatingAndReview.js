@@ -99,28 +99,30 @@ exports.getAverageRating = async (req, res) => {
 }
 
 exports.getAllRating = async (req, res) => {
-    try{
-        const allReviews = RatingAndReview.find({})
-                            .sort({rating : 'desc'})
-                            .populate({
-                                path : 'user',
-                                select : 'firstName lastName email image'
-                            })
-                            .populate({
-                                path : 'Course',
-                                select : 'CourseName'
-                            }).exec()
-        return res.status(200).json({
-            success : true,
-            message : 'All ratings and reviews are fetched successfully',
-            data : allReviews
+    try {
+      const allReviews = await RatingAndReview.find({})
+        .sort({ rating: "desc" })
+        .populate({
+          path: "user",
+          select: "firstName lastName email image", // Specify the fields you want to populate from the "Profile" model
         })
-    }
-    catch(error){
-        return res.status(500).json({
-            success : false,
-            message : 'Error while fetching all ratings',
-            error : error.message
+        .populate({
+          path: "course",
+          select: "courseName", //Specify the fields you want to populate from the "Course" model
         })
+        .exec()
+  
+      res.status(200).json({
+        success: true,
+        data: allReviews,
+      })
+    } catch (error) {
+      console.error(error)
+      return res.status(500).json({
+        success: false,
+        message: "Failed to retrieve the rating and review for the course",
+        error: error.message,
+      })
     }
-}
+  }
+  
