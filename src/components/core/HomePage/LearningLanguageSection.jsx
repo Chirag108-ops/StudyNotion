@@ -36,8 +36,8 @@ const LearningLanguageSection = () => {
           </div>
 
           <div className="w-fit mx-auto lg:mb-20 mb-8 -mt-5">
-            <CTAButton active={true} linkto={"/signup"}>
-              <div className="">Learn More</div>
+            <CTAButton active={true} linkto={"/contact"}>
+              <div className="">Contact Us</div>
             </CTAButton>
           </div>
     </div>

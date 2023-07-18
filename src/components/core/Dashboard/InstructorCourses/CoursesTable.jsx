@@ -36,7 +36,6 @@ export default function CoursesTable({ courses, setCourses }) {
     setConfirmationModal(null)
     setLoading(false)
   }
-
   // console.log("All Course ", courses)
 
   return (
@@ -110,7 +109,7 @@ export default function CoursesTable({ courses, setCourses }) {
                   </div>
                 </Td>
                 <Td className="text-sm font-medium text-richblack-100">
-                  2hr 30min
+                  {course?.totalDuration}
                 </Td>
                 <Td className="text-sm font-medium text-richblack-100">
                   ₹{course.price}

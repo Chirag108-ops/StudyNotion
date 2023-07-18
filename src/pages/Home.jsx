@@ -1,5 +1,6 @@
 // Icons Import
 import { FaArrowRight } from "react-icons/fa"
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
 // Image and Video Import
@@ -16,6 +17,7 @@ import LearningLanguageSection from "../components/core/HomePage/LearningLanguag
 import TimelineSection from "../components/core/HomePage/TimelineSection"
 
 function Home() {
+  const { token } = useSelector((state) => state.auth)
   return (
     <div>
       {/* Section 1 */}
@@ -24,7 +26,9 @@ function Home() {
         <Link to={"/signup"}>
           <div className="group mx-auto mt-16 w-fit rounded-full bg-richblack-800 p-1 font-bold text-richblack-200 drop-shadow-[0_1.5px_rgba(255,255,255,0.25)] transition-all duration-200 hover:scale-95 hover:drop-shadow-none">
             <div className="flex flex-row items-center gap-2 rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
-              <p>Become an Instructor</p>
+              {
+                token ? (<p>Go to Dashboard</p>) : (<p>Become an Instructor</p>)
+              }
               <FaArrowRight />
             </div>
           </div>
@@ -45,14 +49,17 @@ function Home() {
         </div>
 
         {/* CTA Buttons */}
-        <div className="mt-8 flex flex-row gap-7">
-          <CTAButton active={true} linkto={"/signup"}>
-            Learn More
-          </CTAButton>
-          <CTAButton active={false} linkto={"/login"}>
-            Book a Demo
-          </CTAButton>
-        </div>
+        {
+          !token &&
+          <div className="mt-8 flex flex-row gap-7">
+            <CTAButton active={true} linkto={"/signup"}>
+              Learn More
+            </CTAButton>
+            <CTAButton active={false} linkto={"/login"}>
+              Book a Demo
+            </CTAButton>
+          </div>
+        }
 
         {/* Video */}
         <div className="mx-3 my-7 shadow-[10px_-5px_50px_-5px] shadow-blue-200">
@@ -87,7 +94,7 @@ function Home() {
             }}
             ctabtn2={{
               btnText: "Learn More",
-              link: "/signup",
+              link: "/about",
               active: false,
             }}
             codeColor={"text-yellow-25"}
@@ -111,12 +118,12 @@ function Home() {
             }
             ctabtn1={{
               btnText: "Continue Lesson",
-              link: "/signup",
+              link: '/dashboard/enrolled-courses',
               active: true,
             }}
             ctabtn2={{
               btnText: "Learn More",
-              link: "/signup",
+              link: "/about",
               active: false,
             }}
             codeColor={"text-white"}
@@ -136,13 +143,15 @@ function Home() {
           <div className="mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8">
             <div className="lg:h-[150px]"></div>
             <div className="flex flex-row gap-7 text-white lg:mt-8">
-              <CTAButton active={true} linkto={"/signup"}>
+              <CTAButton active={true} linkto={
+                token ? '/dashboard/enrolled-courses' : 'signup'
+              }>
                 <div className="flex items-center gap-2">
                   Explore Full Catalog
                   <FaArrowRight />
                 </div>
               </CTAButton>
-              <CTAButton active={false} linkto={"/login"}>
+              <CTAButton active={false} linkto={"/about"}>
                 Learn More
               </CTAButton>
             </div>
@@ -162,7 +171,9 @@ function Home() {
                 be a competitive specialist requires more than professional
                 skills.
               </div>
-              <CTAButton active={true} linkto={"/signup"}>
+              <CTAButton active={true} linkto={
+                token ? '/about' : '/login'
+              }>
                 <div className="">Learn More</div>
               </CTAButton>
             </div>
@@ -179,7 +190,9 @@ function Home() {
       {/* Section 3 */}
       <div className="relative mx-auto my-20 flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
         {/* Become a instructor section */}
-        <InstructorSection />
+        {
+          !token && <InstructorSection />
+        }
 
         {/* Reviws from Other Learner */}
         <h1 className="text-center text-4xl font-semibold mt-8">

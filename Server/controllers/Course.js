@@ -352,14 +352,32 @@ exports.getInstructorCourses = async (req, res) => {
     const instructorId = req.user.id
 
     // Find all courses belonging to the instructor
-    const instructorCourses = await Course.find({
+    let instructorCourses = await Course.find({
       instructor: instructorId,
     }).sort({ createdAt: -1 })
-
+    .populate({
+      path: "courseContent",
+      populate: {
+        path: "subSection",
+      },
+    })
+    let durations = []
+    instructorCourses = instructorCourses.map((course) => {
+      let totalDuration = 0
+      course.courseContent.forEach((section) => {
+        section.subSection.forEach((subSection) => {
+          totalDuration += parseInt(subSection.timeDuration)
+        })
+      })
+      course.totalDuration = convertSecondsToDuration(totalDuration)
+      durations.push(course.totalDuration)
+      return course
+    })
     // Return the instructor's courses
     res.status(200).json({
       success: true,
       data: instructorCourses,
+      durations
     })
   } catch (error) {
     console.error(error)

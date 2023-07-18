@@ -274,6 +274,11 @@ export const fetchInstructorCourses = async (token) => {
       throw new Error("Could Not Fetch Instructor Courses")
     }
     result = response?.data?.data
+    let durations = response?.data?.durations
+    result = result.map((course,index) => {
+      course.totalDuration = durations[index]
+      return course
+    })
   } catch (error) {
     console.log("INSTRUCTOR COURSES API ERROR............", error)
     toast.error(error.message)
