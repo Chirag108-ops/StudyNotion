@@ -20,13 +20,15 @@ import { ratingsEndpoints } from "../../services/apis"
 function ReviewSlider() {
   const [reviews, setReviews] = useState([])
   const truncateWords = 5
-
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
     ;(async () => {
+      setLoading(true)
       const { data } = await apiConnector(
         "GET",
         ratingsEndpoints.REVIEWS_DETAILS_API
       )
+      setLoading(false)
       if (data?.success) {
         setReviews(data?.data)
       }
@@ -36,7 +38,10 @@ function ReviewSlider() {
   // console.log(reviews)
 
   return (
-    <div className="text-white">
+    <>
+      {
+        loading ? <div className="spinner"></div> : 
+        <div className="text-white">
       <div className="my-[50px] h-[184px] max-w-maxContentTab lg:max-w-maxContent">
         <Swiper
           slidesPerView={4}
@@ -116,6 +121,8 @@ function ReviewSlider() {
         </Swiper>
       </div>
     </div>
+      }
+    </>
   )
 }
 
