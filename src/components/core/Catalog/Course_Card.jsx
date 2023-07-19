@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Course_Card = ({course, Height}) => {
 
-
+  console.log(course)
     const [avgReviewCount, setAvgReviewCount] = useState(0);
 
     useEffect(()=> {

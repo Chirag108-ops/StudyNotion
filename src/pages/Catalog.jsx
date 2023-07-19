@@ -1,49 +1,46 @@
-import React, { useEffect, useState } from 'react'
-import Footer from '../components/common/Footer'
-import { useParams } from 'react-router-dom'
-import { apiConnector } from '../services/apiconnector';
-import { categories } from '../services/apis';
-import { getCatalogaPageData } from '../services/operations/pageAndComponentData';
-import Course_Card from '../components/core/Catalog/Course_Card';
-import CourseSlider from '../components/core/Catalog/CourseSlider';
+import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import { useParams } from "react-router-dom"
+import Footer from "../components/common/Footer"
+import Course_Card from "../components/core/Catalog/Course_Card"
+import CourseSlider from "../components/core/Catalog/CourseSlider"
+import { apiConnector } from "../services/apiconnector"
+import { categories } from "../services/apis"
+import { getCatalogPageData } from "../services/operations/pageAndComponentData"
 import Error from "./Error"
 
-const Catalog = () => {
-
+function Catalog() {
   const { loading } = useSelector((state) => state.profile)
   const { catalogName } = useParams()
   const [active, setActive] = useState(1)
-  const [catalogPageData, setCatalogPageData] = useState(null);
-  const [categoryId, setCategoryId] = useState("");
-
-  //Fetch all categories
+  const [catalogPageData, setCatalogPageData] = useState(null)
+  const [categoryId, setCategoryId] = useState("")
+  // Fetch All Categories
   useEffect(() => {
-    const getCategories = async () => {
-      const res = await apiConnector("GET", categories.CATEGORIES_API);
-      const category_id =
-        res?.data?.data?.filter((ct) => ct.name.split(" ").join("-").toLowerCase() === catalogName)[0]._id;
-      setCategoryId(category_id);
-    }
-    getCategories();
-  }, [catalogName]);
-
-  useEffect(() => {
-    const getCategoryDetails = async () => {
+    ;(async () => {
       try {
-        const res = await getCatalogaPageData(categoryId);
-        setCatalogPageData(res);
+        const res = await apiConnector("GET", categories.CATEGORIES_API)
+        const category_id = res?.data?.data?.filter(
+          (ct) => ct.name.split(" ").join("-").toLowerCase() === catalogName
+        )[0]._id
+        setCategoryId(category_id)
+      } catch (error) {
+        console.log("Could not fetch Categories.", error)
       }
-      catch (error) {
-        console.log(error)
-      }
-    }
+    })()
+  }, [catalogName])
+  useEffect(() => {
     if (categoryId) {
-      getCategoryDetails();
+      ;(async () => {
+        try {
+          const res = await getCatalogPageData(categoryId)
+          setCatalogPageData(res)
+        } catch (error) {
+          console.log(error)
+        }
+      })()
     }
-
-  }, [categoryId]);
-
+  }, [categoryId])
 
   if (loading || !catalogPageData) {
     return (
@@ -78,22 +75,24 @@ const Catalog = () => {
 
       {/* Section 1 */}
       <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
-        <div className="section_heading text-white">Courses to get you started</div>
+        <div className="section_heading">Courses to get you started</div>
         <div className="my-4 flex border-b border-b-richblack-600 text-sm">
           <p
-            className={`px-4 py-2 ${active === 1
+            className={`px-4 py-2 ${
+              active === 1
                 ? "border-b border-b-yellow-25 text-yellow-25"
                 : "text-richblack-50"
-              } cursor-pointer`}
+            } cursor-pointer`}
             onClick={() => setActive(1)}
           >
             Most Populer
           </p>
           <p
-            className={`px-4 py-2 ${active === 2
+            className={`px-4 py-2 ${
+              active === 2
                 ? "border-b border-b-yellow-25 text-yellow-25"
                 : "text-richblack-50"
-              } cursor-pointer`}
+            } cursor-pointer`}
             onClick={() => setActive(2)}
           >
             New
@@ -107,7 +106,7 @@ const Catalog = () => {
       </div>
       {/* Section 2 */}
       <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
-        <div className="section_heading text-white">
+        <div className="section_heading">
           Top courses in {catalogPageData?.data?.differentCategory?.name}
         </div>
         <div className="py-8">
@@ -119,7 +118,7 @@ const Catalog = () => {
 
       {/* Section 3 */}
       <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
-        <div className="section_heading text-white">Frequently Bought</div>
+        <div className="section_heading">Frequently Bought</div>
         <div className="py-8">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {catalogPageData?.data?.mostSellingCourses
